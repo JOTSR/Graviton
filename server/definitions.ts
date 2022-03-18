@@ -8,9 +8,9 @@ export type Coord3D<T> = [T, T, T];
 export type Coord2D<T> = [T, T];
 
 export type Body = {
-	type: 'amas' | 'galaxy';
+	// type: 'amas' | 'galaxy';
 	mass: Mass;
-	width: Length;
-	position: Coord3D<Length>;
+	// width: Length;
+	position: Coord3D<Length> | Coord2D<Length>;
 	acceleration: Coord3D<Acceleration>;
 };

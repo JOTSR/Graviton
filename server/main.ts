@@ -11,9 +11,9 @@ display.start();
 
 setInterval(() => {
 	// const bodies = system.bodies;
-	
+
 	// const updatedBodies = updatePosition(bodies, field, τ);
 	display.update();
-	
+
 	// system.bodies = updatedBodies;
-}, 0)
+}, 0);

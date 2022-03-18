@@ -1,4 +1,3 @@
-import { Body } from './definitions.ts';
 import { System } from './system.ts';
 import { Application, Router } from '../deps.ts';
 
@@ -16,26 +15,33 @@ app.use(async (context, next) => {
 });
 
 export class Display {
-	#socket?: WebSocket
+	#socket?: WebSocket;
+	#system: System;
 	/**
 	 * Display the system in a GUI
 	 * @param system
 	 */
 	constructor(system: System) {
-		// throw new Error('Not implemented')
+		this.#system = system;
 	}
 
 	/**
 	 * Start UI
 	 */
 	async start() {
-		const router = new Router()
+		const router = new Router();
 		router.get('/ws', (ctx) => {
-			this.#socket = ctx.upgrade()
-			this.#socket.onopen = () => console.log('socket opened')
-			this.#socket.onerror = (e) => console.log("socket errored:", e);
-  			this.#socket.onclose = () => console.log("socket closed");
-		})
+			this.#socket = ctx.upgrade();
+			this.#socket.onopen = () => console.log('socket opened');
+			this.#socket.onerror = (e) => console.log('socket errored:', e);
+			this.#socket.onclose = () => console.log('socket closed');
+		});
+
+		router.post('/controls', async (ctx) => {
+			const body = ctx.request.body({ type: 'form-data' });
+			const formData = await body.value.read();
+			this.#system.configFromUI(formData.fields);
+		});
 
 		app.addEventListener('listen', async () => {
 			const cmd = [
@@ -47,8 +53,8 @@ export class Display {
 			await process.status();
 		});
 
-		app.use(router.routes())
-		app.use(router.allowedMethods())
+		app.use(router.routes());
+		app.use(router.allowedMethods());
 
 		await app.listen({ port: 8080 });
 	}
@@ -61,8 +67,8 @@ export class Display {
 		if (this.#socket?.readyState === this.#socket?.OPEN) {
 			const data = new Uint8Array(
 				new Array(800 ** 2 * 4).fill(1).map((_) => Math.random() * 255),
-			)
-			this.#socket?.send(data)  
+			);
+			this.#socket?.send(data);
 		}
 	}
 }
