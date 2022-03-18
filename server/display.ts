@@ -1,6 +1,6 @@
 import { Body } from './definitions.ts';
 import { System } from './system.ts';
-import { Application } from '../deps.ts';
+import { Application, Router } from '../deps.ts';
 
 const app = new Application();
 
@@ -16,6 +16,7 @@ app.use(async (context, next) => {
 });
 
 export class Display {
+	#socket?: WebSocket
 	/**
 	 * Display the system in a GUI
 	 * @param system
@@ -28,6 +29,14 @@ export class Display {
 	 * Start UI
 	 */
 	async start() {
+		const router = new Router()
+		router.get('/ws', (ctx) => {
+			this.#socket = ctx.upgrade()
+			this.#socket.onopen = () => console.log('socket opened')
+			this.#socket.onerror = (e) => console.log("socket errored:", e);
+  			this.#socket.onclose = () => console.log("socket closed");
+		})
+
 		app.addEventListener('listen', async () => {
 			const cmd = [
 				'pwsh',
@@ -37,6 +46,10 @@ export class Display {
 			const process = Deno.run({ cmd });
 			await process.status();
 		});
+
+		app.use(router.routes())
+		app.use(router.allowedMethods())
+
 		await app.listen({ port: 8080 });
 	}
 
@@ -44,9 +57,12 @@ export class Display {
 	 * Update UI
 	 * @param bodies
 	 */
-	update(bodies: Body[]) {
-		const data = new Uint8ClampedArray(
-			new Array(800 ** 2 * 4).fill(1).map((_) => Math.random() * 255),
-		);
+	update(/*bodies: Body[]*/) {
+		if (this.#socket?.readyState === this.#socket?.OPEN) {
+			const data = new Uint8Array(
+				new Array(800 ** 2 * 4).fill(1).map((_) => Math.random() * 255),
+			)
+			this.#socket?.send(data)  
+		}
 	}
 }

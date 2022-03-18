@@ -7,14 +7,13 @@ const system = new System([10, 10, 10] as Coord3D<Length>, 200);
 
 const display = new Display(system);
 
-await display.start();
+display.start();
 
-while (false) {
-	const bodies = system.bodies;
-
-	const updatedBodies = updatePosition(bodies, field, τ);
-
-	display.update(bodies);
-
-	system.bodies = updatedBodies;
-}
+setInterval(() => {
+	// const bodies = system.bodies;
+	
+	// const updatedBodies = updatePosition(bodies, field, τ);
+	display.update();
+	
+	// system.bodies = updatedBodies;
+}, 0)

@@ -1,6 +1,6 @@
 const $ = <T extends HTMLElement>(selector: string) =>
 	document.querySelector<T>(selector);
-const $$ = (selector: string) => document.querySelectorAll(selector);
+// const $$ = (selector: string) => document.querySelectorAll(selector);
 
 resizeTo(1200, 800);
 
@@ -17,27 +17,23 @@ resizeTo(1200, 800);
 	});
 })();
 
-(async () => {
+(() => {
 	const canvas = $<HTMLCanvasElement>('#canvas')!;
 	const ctx = canvas.getContext('2d');
 	const image = ctx?.createImageData(800, 800)!;
 
-	const wss = new WebSocketStream('localhost:3000');
-	const { readable, writable } = await wss.connection;
-	const reader = readable.getReader();
+	const ws = new WebSocket('ws://localhost:8080/ws');
 
-	async function draw() {
-		const { value, done } = await reader.read();
+    ws.onopen = () => console.log('socket opened')
+    ws.onmessage = async ({ data }) => {
+        const value = await (data as Blob).arrayBuffer()
+        requestAnimationFrame(function () {
+            draw(new Uint8Array(value))
+        })
+    }
 
-		// image.data.set(new Uint8ClampedArray(
-		//     new Array(800 ** 2 * 4).fill(1).map(_ => Math.random() * 255)
-		// ))
-
-		image.data.set(value as Uint8Array);
-
+	function draw(value: Uint8Array) {
+		image.data.set(value);
 		ctx?.putImageData(image, 0, 0);
-
-		if (!done) requestAnimationFrame(draw);
-	}
-	requestAnimationFrame(draw);
+    }
 })();
