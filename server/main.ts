@@ -1,20 +1,20 @@
-import { Coord3D, Length } from './definitions.ts'
-import { Display } from "./display.ts";
-import { updatePosition } from "./gravitation.ts";
-import { System, τ, field } from "./system.ts";
+import { Coord3D, Length } from './definitions.ts';
+import { Display } from './display.ts';
+import { updatePosition } from './gravitation.ts';
+import { field, System, τ } from './system.ts';
 
-const system = new System([10, 10, 10] as Coord3D<Length>, 200)
+const system = new System([10, 10, 10] as Coord3D<Length>, 200);
 
-const display = new Display(system)
+const display = new Display(system);
 
-await display.start()
+await display.start();
 
 while (false) {
-    const bodies = system.bodies
+	const bodies = system.bodies;
 
-    const updatedBodies = updatePosition(bodies, field, τ)
+	const updatedBodies = updatePosition(bodies, field, τ);
 
-    display.update(bodies)
+	display.update(bodies);
 
-    system.bodies = updatedBodies
+	system.bodies = updatedBodies;
 }

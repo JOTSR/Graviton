@@ -1,4 +1,4 @@
-import { Body, Time } from './definitions.ts'
+import { Body, Time } from './definitions.ts';
 
 /**
  * Update the position of given bodies in function of time and G field
@@ -7,10 +7,12 @@ import { Body, Time } from './definitions.ts'
  * @param τ Time integration constant
  * @returns updated array of bodies
  */
-export function updatePosition(currentState: Body[], field: number, τ: Time): Body[] {
-    
-    const updatedState = currentState
-    throw new Error('Not implemented')
-    
-    return updatedState
+export function updatePosition(
+	currentState: Body[],
+	field: number,
+	τ: Time,
+): Body[] {
+	const updatedState = currentState;
+	throw new Error('Not implemented');
+	return updatedState;
 }
