@@ -92,11 +92,11 @@ export class System {
 		const array = new Array(
 			this.#size.reduce((prev, curr) => ((prev * curr) * 4) as Length),
 		).fill(0) as number[];
-		for (const { position } of this.#bodies) {
-			//possible overflow > 255
+		for (const { position, color } of this.#bodies) {
+			if (position[0] < 0 || position[0] > 800) continue;
+			if (position[1] < 0 || position[1] > 800) continue;
 			const index = matrixIndexToPixelLinearIndex(position, this.#size);
-			const value = /*array[index] +*/ 255;
-			array.splice(index, 4, value, value, value, 255);
+			array.splice(index, 4, ...(color ?? [255, 255, 255]), 255);
 		}
 
 		return Uint8ClampedArray.from(array);
@@ -113,7 +113,8 @@ function matrixIndexToPixelLinearIndex(
 	position: number[],
 	matrixSize: number[],
 ): number {
-	const rawIndex = Math.round(position[0]) * 4 + Math.round(position[1]) * matrixSize[1] * 4;
+	const rawIndex = Math.round(position[0]) * 4 +
+		Math.round(position[1]) * matrixSize[1] * 4;
 	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4;
 	return rawIndex % pixelArrayLength;
 }

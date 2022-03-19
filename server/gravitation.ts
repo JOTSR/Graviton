@@ -23,7 +23,14 @@ export function updatePosition(
 		const Δposition = acceleration.map((acc) => acc * (τ / 100) ** 2);
 		const updatedPosition = position.map((coord, index) => {
 			const rawUpdatedCoord = coord + Δposition[index];
-			const updatedCoord = rawUpdatedCoord % 400 as Length;
+			// const updatedCoord = rawUpdatedCoord % 800 as Length;
+			// if (rawUpdatedCoord > 800 || rawUpdatedCoord < 0) {
+			// 	//@ts-ignore inversion keep type
+			// 	updatedAcceleration[index] *= -1;
+			// 	// updatedAcceleration[index] = 0
+			// 	return coord
+			// }
+			const updatedCoord = rawUpdatedCoord as Length;
 			return updatedCoord;
 		}) as Coord2D<Length>;
 
@@ -45,14 +52,15 @@ function computeAcceleration(
 	const size = otherBodies.length;
 	let accelerationX = refBody.acceleration[0] as number;
 	let accelerationY = refBody.acceleration[1] as number;
-	//TODO add mass and G
 	for (const body of otherBodies) {
-		if (body.position[0] === refBody.position[0]) continue;
-		if (body.position[1] === refBody.position[1]) continue;
-		accelerationX +=
-			fastInvSqrt(body.position[0] ** 2 - refBody.position[0] ** 2) / size;
-		accelerationY +=
-			fastInvSqrt(body.position[1] ** 2 - refBody.position[1] ** 2) / size;
+		const Δx = body.position[0] ** 2 - refBody.position[0] ** 2;
+		const Δy = body.position[1] ** 2 - refBody.position[1] ** 2;
+
+		const field = 10; //TODO add to controls UI
+
+		if (Δx === 0 || Δy === 0) continue;
+		accelerationX += field * body.mass * Math.sign(Δx) * fastInvSqrt(Δx) / size;
+		accelerationY += field * body.mass * Math.sign(Δy) * fastInvSqrt(Δy) / size;
 	}
 	return [accelerationX, accelerationY] as Coord2D<Acceleration>;
 }
