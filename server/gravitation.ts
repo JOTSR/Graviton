@@ -12,18 +12,19 @@ export function updatePosition(
 	field: number,
 	τ: Time,
 ): Body[] {
+	//Iterate over all bodies to update their position
 	const updatedState = currentState.map(({ mass, position, acceleration }) => {
 		const updatedPosition = position.map((coord) => {
 			//random path
 			const speed = (τ / (100 - 16)) + 1;
-			const updatedCoord = Math.round(coord + speed * (2 * Math.random() - 1)) %
-				400 as Length;
+			const rawUpdatedCoord = coord + speed * (2 * Math.random() - 1);
+			const updatedCoord = Math.round(rawUpdatedCoord) % 400 as Length;
 			return updatedCoord;
 		}) as typeof position;
 
 		return { mass, position: updatedPosition, acceleration };
 	});
 
-	//Implement real physic model
+	//TODO Implement real physic model
 	return updatedState;
 }

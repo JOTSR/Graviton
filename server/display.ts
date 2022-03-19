@@ -1,6 +1,9 @@
 import { System } from './system.ts';
 import { Application, Router } from '../deps.ts';
 
+/**
+ * Serve UI
+ */
 const app = new Application();
 
 app.use(async (context, next) => {
@@ -30,6 +33,7 @@ export class Display {
 	 */
 	async start() {
 		const router = new Router();
+		//Handle canvas connection to display bodies
 		router.get('/ws', (ctx) => {
 			this.#socket = ctx.upgrade();
 			this.#socket.onopen = () => console.log('socket opened');
@@ -37,6 +41,9 @@ export class Display {
 			this.#socket.onclose = () => console.log('socket closed');
 		});
 
+		/**
+		 * Handle controls update
+		 */
 		router.post('/controls', async (ctx) => {
 			const body = ctx.request.body({ type: 'form-data' });
 			const formData = await body.value.read();
@@ -56,6 +63,7 @@ export class Display {
 		app.use(router.routes());
 		app.use(router.allowedMethods());
 
+		//Start server on http://localhost:8080
 		await app.listen({ port: 8080 });
 	}
 

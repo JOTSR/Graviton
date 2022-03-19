@@ -4,6 +4,9 @@ const $ = <T extends HTMLElement>(selector: string) =>
 
 resizeTo(1200, 800);
 
+/**
+ * Map event and server update to controls UI
+ */
 (() => {
 	const controls = $<HTMLFormElement>('#controls')!;
 
@@ -34,6 +37,9 @@ resizeTo(1200, 800);
 	});
 })();
 
+/**
+ * Draw canvas and handle server update to display bodies position
+ */
 (() => {
 	const canvas = $<HTMLCanvasElement>('#canvas')!;
 	const ctx = canvas.getContext('2d');

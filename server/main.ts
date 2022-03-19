@@ -9,6 +9,9 @@ const display = new Display(system);
 
 display.start();
 
+/**
+ * Update bodies position at the given interval in ms
+ */
 setInterval(() => {
 	const { bodies, field, τ } = system;
 

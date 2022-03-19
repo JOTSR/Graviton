@@ -47,6 +47,10 @@ export class System {
 		this.#bodies = bodies;
 	}
 
+	/**
+	 * Update system from the UI controls form
+	 * @param controls FormData
+	 */
 	configFromUI(
 		{ bodies, random_mass, mean_mass, update_time }: Record<string, string>,
 	) {
@@ -55,6 +59,11 @@ export class System {
 		this.generateBodies(Number(mean_mass), random_mass === 'on');
 	}
 
+	/**
+	 * Generate array of bodies of the system
+	 * @param meanMass Mean mass of bodies
+	 * @param randomMass Is a dispersion arround meanMass ?
+	 */
 	generateBodies(meanMass: number, randomMass = true) {
 		const bodies: Body[] = [];
 		for (let index = 0; index < this.#bodiesQuantity; index++) {
@@ -74,6 +83,10 @@ export class System {
 		this.#bodies = [...bodies];
 	}
 
+	/**
+	 * Transform a 2d position matrix to a 1D pixel array
+	 * @returns 8bits pixels array (RVBA)
+	 */
 	toPixelArray(): Uint8ClampedArray {
 		const array = new Array(
 			this.#size.reduce((prev, curr) => ((prev * curr) * 4) as Length),
@@ -89,6 +102,12 @@ export class System {
 	}
 }
 
+/**
+ * Compute the index in 1D îxe array from 2d position matrix
+ * @param position body  position
+ * @param matrixSize system size
+ * @returns index in pixel array
+ */
 function matrixIndexToPixelLinearIndex(
 	position: number[],
 	matrixSize: number[],
