@@ -19,11 +19,11 @@ export function updatePosition(
 			position,
 			acceleration,
 		}, ...currentState);
-		//TODO express τ in ms and fix position rounding to avoid arbitrary constant
-		const Δposition = acceleration.map((acc) => acc * (τ / 5) ** 2);
+		//TODO express τ in ms
+		const Δposition = acceleration.map((acc) => acc * (τ / 100) ** 2);
 		const updatedPosition = position.map((coord, index) => {
 			const rawUpdatedCoord = coord + Δposition[index];
-			const updatedCoord = Math.round(rawUpdatedCoord) % 400 as Length;
+			const updatedCoord = rawUpdatedCoord % 400 as Length;
 			return updatedCoord;
 		}) as Coord2D<Length>;
 

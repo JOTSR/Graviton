@@ -7,7 +7,7 @@ import {
 	Time,
 } from './definitions.ts';
 
-import { randomIntArray } from '../deps.ts';
+import { randomArray } from '../deps.ts';
 
 export class System {
 	#bodiesQuantity: number;
@@ -72,7 +72,7 @@ export class System {
 				: meanMass) as Mass;
 			bodies.push({
 				mass,
-				position: randomIntArray(
+				position: randomArray(
 					0,
 					this.#size[0],
 					this.#size.length,
@@ -112,7 +112,8 @@ function matrixIndexToPixelLinearIndex(
 	position: number[],
 	matrixSize: number[],
 ): number {
-	const rawIndex = position[0] * 4 + position[1] * matrixSize[1] * 4;
+	const rawIndex = Math.round(position[0]) * 4 +
+		Math.round(position[1]) * matrixSize[1] * 4;
 	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4;
 	return rawIndex % pixelArrayLength;
 }
