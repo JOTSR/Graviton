@@ -62,11 +62,29 @@ export class System {
 			this.#bodies?.push({
 				mass,
 				//@ts-ignore same type of size
-				position: this.#size.map((coord) =>
-					coord * Math.random()
-				),
+				position: this.#size.map((coord) => {
+					return coord * Math.random();
+				}),
 				acceleration: [0, 0, 0] as Coord3D<Acceleration>,
 			});
 		}
+	}
+
+	toPixelArray(): Uint8ClampedArray {
+		const array = new Array(
+			this.#size.reduce((prev, curr) => ((prev * curr) * 4) as Length),
+		).fill(0) as number[];
+		for (const { position } of this.#bodies) {
+			//possible overflow > 255
+			const index =
+				Math.round(
+					position[0] * 4 + (position[1] - 1) * this.#size[1] * 4 - 1,
+				) % (array.length - 4);
+			const value = array[index];
+			const updatedValues = value + 10;
+			array.splice(index, 4, value, value, value, 255);
+		}
+
+		return Uint8ClampedArray.from(array);
 	}
 }

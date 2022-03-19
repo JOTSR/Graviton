@@ -1,4 +1,4 @@
-import { Body, Time } from './definitions.ts';
+import { Body, Length, Time } from './definitions.ts';
 
 /**
  * Update the position of given bodies in function of time and G field
@@ -12,7 +12,15 @@ export function updatePosition(
 	field: number,
 	τ: Time,
 ): Body[] {
-	const updatedState = currentState;
-	throw new Error('Not implemented');
+	const updatedState = currentState.map(({ mass, position, acceleration }) => {
+		const updatedPosition = position.map((coord) => {
+			// return coord
+			return (coord + 1e-4 * Math.random()) % 800 as Length;
+		}) as typeof position;
+
+		return { mass, position: updatedPosition, acceleration };
+	});
+
+	//Implement real physic model
 	return updatedState;
 }

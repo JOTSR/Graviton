@@ -61,14 +61,11 @@ export class Display {
 
 	/**
 	 * Update UI
-	 * @param bodies
+	 * @param pixelArray
 	 */
-	update(/*bodies: Body[]*/) {
+	update(pixelArray: Uint8ClampedArray) {
 		if (this.#socket?.readyState === this.#socket?.OPEN) {
-			const data = new Uint8Array(
-				new Array(800 ** 2 * 4).fill(1).map((_) => Math.random() * 255),
-			);
-			this.#socket?.send(data);
+			this.#socket?.send(pixelArray);
 		}
 	}
 }
