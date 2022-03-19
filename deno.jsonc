@@ -1,9 +1,15 @@
 {
-    "compilerOptions": {
-        "lib": [
-            "deno.unstable",
-            "DOM",
-            "dom.iterable"
-        ]
-    }
+	"compilerOptions": {
+		"lib": [
+			"deno.unstable",
+			"DOM",
+			"dom.iterable"
+		]
+	},
+	"fmt": {
+		"options": {
+			"singleQuote": true,
+			"useTabs": true
+		}
+	}
 }

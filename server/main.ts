@@ -1,20 +1,23 @@
-import { Coord3D, Length } from './definitions.ts'
-import { Display } from "./display.ts";
-import { updatePosition } from "./gravitation.ts";
-import { System, τ, field } from "./system.ts";
+import { Coord2D, Length } from './definitions.ts';
+import { Display } from './display.ts';
+import { updatePosition } from './gravitation.ts';
+import { System } from './system.ts';
 
-const system = new System([10, 10, 10] as Coord3D<Length>, 200)
+const system = new System([800, 800] as Coord2D<Length>, 1e3);
 
-const display = new Display(system)
+const display = new Display(system);
 
-await display.start()
+display.start();
 
-while (false) {
-    const bodies = system.bodies
+/**
+ * Update bodies position at the given interval in ms
+ */
+setInterval(() => {
+	const { bodies, field, τ } = system;
 
-    const updatedBodies = updatePosition(bodies, field, τ)
+	const updatedBodies = updatePosition(bodies, field, τ);
+	display.update(system.toPixelArray());
 
-    display.update(bodies)
-
-    system.bodies = updatedBodies
-}
+	system.bodies = updatedBodies;
+}, 17);
+//60 fps max

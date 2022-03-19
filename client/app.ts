@@ -1,31 +1,76 @@
-const $ = <T extends HTMLElement>(selector: string) => document.querySelector<T>(selector)
-const $$ = (selector: string) => document.querySelectorAll(selector)
+const $ = <T extends HTMLElement>(selector: string) =>
+	document.querySelector<T>(selector);
+// const $$ = (selector: string) => document.querySelectorAll(selector);
 
-resizeTo(1200, 800)
+resizeTo(1200, 800);
 
-;(() => {
-    const controls = $<HTMLFormElement>('#controls')!
-    
-    controls.addEventListener('submit', async (e) => {
-        e.preventDefault()
-        const datas = new FormData(controls)
-        await fetch('/controls', {
-            method: 'POST',
-            body: datas
-        })
-    })
-})()
+/**
+ * Map event and server update to controls UI
+ */
+(() => {
+	const controls = $<HTMLFormElement>('#controls')!;
 
-;(() => {
-    const canvas = $<HTMLCanvasElement>('#canvas')!
-    const ctx = canvas.getContext('2d')
-    const image = ctx?.createImageData(800, 800)!
-    function draw() {
-        image.data.set(new Uint8ClampedArray(
-            new Array(800 ** 2 * 4).fill(1).map(_ => Math.random() * 255)
-        ))
-        ctx?.putImageData(image, 0, 0)
-        requestAnimationFrame(draw)
-    }
-    requestAnimationFrame(draw)
-})()
+	controls.querySelectorAll<HTMLInputElement>('input[type="range"]').forEach(
+		(input) => {
+			const placholder = $(`label[for="${input.name}"]`)?.querySelector('font');
+			if (placholder) {
+				placholder.innerText = input.value;
+			}
+			input.addEventListener('change', () => {
+				const placholder = $(`label[for="${input.name}"]`)?.querySelector(
+					'font',
+				);
+				if (placholder) {
+					placholder.innerText = input.value;
+				}
+			});
+		},
+	);
+
+	controls.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const datas = new FormData(controls);
+		await fetch('/controls', {
+			method: 'POST',
+			body: datas,
+		});
+	});
+})();
+
+/**
+ * Draw canvas and handle server update to display bodies position
+ */
+(() => {
+	const canvas = $<HTMLCanvasElement>('#canvas')!;
+	const ctx = canvas.getContext('2d');
+	const image = ctx?.createImageData(800, 800)!;
+
+	try {
+		const ws = new WebSocket('ws://localhost:8080/ws');
+		let startDelay = Date.now();
+
+		ws.onopen = () => console.log('socket opened');
+		ws.onmessage = async ({ data }) => {
+			const value = await (data as Blob).arrayBuffer();
+			requestAnimationFrame(function () {
+				showFps(Date.now() - startDelay);
+				startDelay = Date.now();
+				draw(new Uint8Array(value));
+			});
+		};
+	} catch (e) {
+		console.error(e);
+	}
+
+	function draw(value: Uint8Array) {
+		image.data.set(value);
+		ctx?.putImageData(image, 0, 0);
+	}
+})();
+
+function showFps(delay: number) {
+	const counter = $('#fps_count');
+	if (!counter) return;
+	const fps = Math.round(1000 / delay);
+	counter.innerText = `${fps} fps`;
+}

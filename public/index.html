@@ -9,9 +9,20 @@
     <title>Graviton</title>
 </head>
 <body>
+    <p id="fps_count">?? fps</p>
     <div class="view">
         <canvas id="canvas"></canvas>
-        <form action="" id="controls"></form>
+        <form action="" id="controls">
+            <label for="bodies">Bodies (10e<font></font>)</label>
+            <input type="range" min="1" max="6", step="1" name="bodies" value="4">
+            <label for="random_mass">Random mass</label>
+            <input type="checkbox" checked name="random_mass">
+            <label for="mean_mass">Mean mass (<font></font>)</label>
+            <input type="range" min="1" max="100" step="1" name="mean_mass">
+            <label for="update_time">Update time (<font></font>ms)</label>
+            <input type="range" min="16" max="100" value="33" name="update_time">
+            <button type="submit">Process</button>
+        </form>
     </div>
 </body>
 </html>

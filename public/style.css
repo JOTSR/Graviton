@@ -1,6 +1,8 @@
 :root {
     --main-bg: #fefefe;
     --main-font-family: Verdana, Geneva, Tahoma, sans-serif;
+    --accent-color: rgb(12, 105, 212);
+    --dark-accent-color: rgb(16, 78, 150);
 }
 
 html {
@@ -37,5 +39,40 @@ body {
 }
 
 .view form {
+    display: grid;
+    padding: 15px;
+    text-align: center;
+    align-items: center;
+    justify-items: center;
+}
+
+.view form input[type="range"],
+.view form button {
+    width: 100%;
+}
+
+.view form button {
+    padding: 15px;
+    font-size: large;
+    color: white;
+    background-color: var(--accent-color);
     border: none;
+    border-radius: 5px;
+    box-shadow: 0 0 5px 4px rgba(0, 0, 0, 0.2);
+    transition: all 0.2s ease;
+}
+
+.view form button:active {
+    background-color: var(--dark-accent-color);
+    box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
+}
+
+#fps_count {
+    position: fixed;
+    top: 0;
+    right: 15px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-family: monospace;
 }
