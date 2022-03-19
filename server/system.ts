@@ -56,7 +56,7 @@ export class System {
 	}
 
 	generateBodies(meanMass: number, randomMass = true) {
-		const bodies: Body[] = []
+		const bodies: Body[] = [];
 		for (let index = 0; index < this.#bodiesQuantity; index++) {
 			const mass = (randomMass
 				? meanMass * (0.5 + 0.5 * Math.random())
@@ -71,7 +71,7 @@ export class System {
 				acceleration: [0, 0] as Coord2D<Acceleration>,
 			});
 		}
-		this.#bodies = [...bodies]
+		this.#bodies = [...bodies];
 	}
 
 	toPixelArray(): Uint8ClampedArray {
