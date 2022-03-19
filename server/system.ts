@@ -7,14 +7,14 @@ import {
 	Time,
 } from './definitions.ts';
 
-import { randomIntArray } from '../deps.ts';
+import { randomArray } from '../deps.ts';
 
 export class System {
 	#bodiesQuantity: number;
 	#size: Coord2D<Length>;
 	#bodies = [] as Body[];
 
-	τ = 10 as Time;
+	τ = 17 as Time;
 	field = 6.674_30e-11; //G
 
 	/**
@@ -72,12 +72,13 @@ export class System {
 				: meanMass) as Mass;
 			bodies.push({
 				mass,
-				position: randomIntArray(
+				position: randomArray(
 					0,
 					this.#size[0],
 					this.#size.length,
 				) as Coord2D<Length>,
-				acceleration: [0, 0] as Coord2D<Acceleration>,
+				//TODO initial acceleration must be configurable via UI
+				acceleration: randomArray(-10, 10, 2) as Coord2D<Acceleration>,
 			});
 		}
 		this.#bodies = [...bodies];
@@ -91,11 +92,11 @@ export class System {
 		const array = new Array(
 			this.#size.reduce((prev, curr) => ((prev * curr) * 4) as Length),
 		).fill(0) as number[];
-		for (const { position } of this.#bodies) {
-			//possible overflow > 255
+		for (const { position, color } of this.#bodies) {
+			if (position[0] < 0 || position[0] > 800) continue;
+			if (position[1] < 0 || position[1] > 800) continue;
 			const index = matrixIndexToPixelLinearIndex(position, this.#size);
-			const value = /*array[index] +*/ 255;
-			array.splice(index, 4, value, value, value, 255);
+			array.splice(index, 4, ...(color ?? [255, 255, 255]), 255);
 		}
 
 		return Uint8ClampedArray.from(array);
@@ -112,7 +113,8 @@ function matrixIndexToPixelLinearIndex(
 	position: number[],
 	matrixSize: number[],
 ): number {
-	const rawIndex = position[0] * 4 + position[1] * matrixSize[1] * 4;
+	const rawIndex = Math.round(position[0]) * 4 +
+		Math.round(position[1]) * matrixSize[1] * 4;
 	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4;
 	return rawIndex % pixelArrayLength;
 }

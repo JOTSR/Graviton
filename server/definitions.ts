@@ -11,6 +11,7 @@ export type Body = {
 	// type: 'amas' | 'galaxy';
 	mass: Mass;
 	// width: Length;
+	color?: [number, number, number];
 	position: Coord2D<Length>;
 	acceleration: Coord2D<Acceleration>;
 };
