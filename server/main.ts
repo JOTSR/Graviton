@@ -1,7 +1,7 @@
 import { Coord3D, Length } from './definitions.ts';
 import { Display } from './display.ts';
 import { updatePosition } from './gravitation.ts';
-import { field, System, τ } from './system.ts';
+import { System } from './system.ts';
 
 const system = new System([10, 10, 10] as Coord3D<Length>, 200);
 
@@ -10,10 +10,10 @@ const display = new Display(system);
 display.start();
 
 setInterval(() => {
-	// const bodies = system.bodies;
+	const { bodies, field, τ } = system;
 
-	// const updatedBodies = updatePosition(bodies, field, τ);
+	const updatedBodies = updatePosition(bodies, field, τ);
 	display.update();
 
-	// system.bodies = updatedBodies;
+	system.bodies = updatedBodies;
 }, 0);
