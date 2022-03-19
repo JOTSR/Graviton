@@ -15,8 +15,9 @@ export function updatePosition(
 	const updatedState = currentState.map(({ mass, position, acceleration }) => {
 		const updatedPosition = position.map((coord) => {
 			//random path
-			const updatedCoord = Math.round(coord + (4 * Math.random() - 2)) % 400 as Length;
-			return updatedCoord
+			const updatedCoord = Math.round(coord + (4 * Math.random() - 2)) %
+				400 as Length;
+			return updatedCoord;
 		}) as typeof position;
 
 		return { mass, position: updatedPosition, acceleration };
