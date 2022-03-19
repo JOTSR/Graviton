@@ -62,7 +62,11 @@ export class System {
 				: meanMass) as Mass;
 			this.#bodies?.push({
 				mass,
-				position: randomIntArray(0, this.#size[0], this.#size.length) as Coord2D<Length>,
+				position: randomIntArray(
+					0,
+					this.#size[0],
+					this.#size.length,
+				) as Coord2D<Length>,
 				acceleration: [0, 0] as Coord2D<Acceleration>,
 			});
 		}
@@ -74,7 +78,7 @@ export class System {
 		).fill(0) as number[];
 		for (const { position } of this.#bodies) {
 			//possible overflow > 255
-			const index = matrixIndexToPixelLinearIndex(position, this.#size)
+			const index = matrixIndexToPixelLinearIndex(position, this.#size);
 			const value = array[index] + 10;
 			array.splice(index, 4, value, value, value, 255);
 		}
@@ -83,8 +87,11 @@ export class System {
 	}
 }
 
-function matrixIndexToPixelLinearIndex(position: number[], matrixSize: number[]): number {
-	const rawIndex = position[0] * 4 + position[1] * matrixSize[1] * 4
-	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4
-	return rawIndex % pixelArrayLength
+function matrixIndexToPixelLinearIndex(
+	position: number[],
+	matrixSize: number[],
+): number {
+	const rawIndex = position[0] * 4 + position[1] * matrixSize[1] * 4;
+	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4;
+	return rawIndex % pixelArrayLength;
 }
