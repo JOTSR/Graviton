@@ -48,19 +48,20 @@ export class System {
 	}
 
 	configFromUI(
-		{ body, random_mass, mean_mass, update_time }: Record<string, string>,
+		{ bodies, random_mass, mean_mass, update_time }: Record<string, string>,
 	) {
-		this.#bodiesQuantity = 10 ** Math.round(Number(body));
+		this.#bodiesQuantity = 10 ** Math.round(Number(bodies));
 		this.τ = Number(update_time) as Time;
 		this.generateBodies(Number(mean_mass), random_mass === 'on');
 	}
 
 	generateBodies(meanMass: number, randomMass = true) {
+		const bodies: Body[] = []
 		for (let index = 0; index < this.#bodiesQuantity; index++) {
 			const mass = (randomMass
 				? meanMass * (0.5 + 0.5 * Math.random())
 				: meanMass) as Mass;
-			this.#bodies?.push({
+			bodies.push({
 				mass,
 				position: randomIntArray(
 					0,
@@ -70,6 +71,7 @@ export class System {
 				acceleration: [0, 0] as Coord2D<Acceleration>,
 			});
 		}
+		this.#bodies = [...bodies]
 	}
 
 	toPixelArray(): Uint8ClampedArray {
