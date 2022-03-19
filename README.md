@@ -24,13 +24,14 @@ friendly GUI.
 
 ## Recommended
 
-- editor: [VSCode](https://code.visualstudio.com/) with [Deno extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
+- editor: [VSCode](https://code.visualstudio.com/) with
+  [Deno extension](https://marketplace.visualstudio.com/items?itemName=denoland.vscode-deno)
 
 ## Documentation
 
-See [Deno doc](https://doc.deno.land) with files https://raw.githubusercontent.com/JOTSR/Graviton/{BRANCH}/{File_path}
-example: https://doc.deno.land/https://raw.githubusercontent.com/JOTSR/Graviton/develop/server/system.ts
-
+See [Deno doc](https://doc.deno.land) with files
+https://raw.githubusercontent.com/JOTSR/Graviton/{BRANCH}/{File_path} example:
+https://doc.deno.land/https://raw.githubusercontent.com/JOTSR/Graviton/develop/server/system.ts
 
 ### Prerequisites
 
