@@ -11,7 +11,7 @@ const display = new Display(system);
 system.bodies[0].mass = 1e5 as Mass;
 system.bodies[0].acceleration = [0, 0] as Coord2D<Acceleration>;
 system.bodies[0].position = [400, 400] as Coord2D<Length>;
-system.bodies[0].color = [255, 0, 0];
+system.bodies[0].color = [0, 255, 0];
 
 display.start();
 

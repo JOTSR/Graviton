@@ -92,15 +92,40 @@ export class System {
 		const array = new Array(
 			this.#size.reduce((prev, curr) => ((prev * curr) * 4) as Length),
 		).fill(0) as number[];
-		for (const { position, color } of this.#bodies) {
+		for (const { position, color, acceleration } of this.#bodies) {
 			if (position[0] < 0 || position[0] > 800) continue;
 			if (position[1] < 0 || position[1] > 800) continue;
 			const index = matrixIndexToPixelLinearIndex(position, this.#size);
-			array.splice(index, 4, ...(color ?? [255, 255, 255]), 255);
+			const meanAcceleration = Math.abs(acceleration[0]) +
+				Math.abs(acceleration[1]) / 2;
+			const colorShift = computeColorShift(meanAcceleration);
+			array.splice(index, 4, ...(color ?? colorShift), 255);
 		}
 
 		return Uint8ClampedArray.from(array);
 	}
+}
+
+function computeColorShift(acceleration: number) {
+	let r = 255;
+	let v = 255;
+	let b = 255;
+
+	const ceil = 50;
+	if (acceleration > ceil) {
+		r = 255 - acceleration + ceil;
+		v = r;
+	}
+	if (acceleration < ceil) {
+		b = 255 * acceleration / ceil;
+		v = b;
+	}
+
+	r = r < 20 ? 20 : r;
+	v = v < 20 ? 20 : v;
+	b = b < 20 ? 20 : b;
+
+	return [r, v, b] as const;
 }
 
 /**
