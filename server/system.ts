@@ -14,7 +14,7 @@ export class System {
 	#size: Coord2D<Length>;
 	#bodies = [] as Body[];
 
-	τ = 10 as Time;
+	τ = 17 as Time;
 	field = 6.674_30e-11; //G
 
 	/**
