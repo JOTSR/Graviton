@@ -66,3 +66,13 @@ body {
     background-color: var(--dark-accent-color);
     box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.2);
 }
+
+#fps_count {
+    position: fixed;
+    top: 0;
+    right: 15px;
+    padding: 5px;
+    background-color: rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    font-family: monospace;
+}

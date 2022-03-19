@@ -41,11 +41,14 @@ resizeTo(1200, 800);
 
 	try {
 		const ws = new WebSocket('ws://localhost:8080/ws');
+		let startDelay = Date.now()
 
 		ws.onopen = () => console.log('socket opened');
 		ws.onmessage = async ({ data }) => {
 			const value = await (data as Blob).arrayBuffer();
 			requestAnimationFrame(function () {
+				showFps(Date.now() - startDelay)
+				startDelay = Date.now()
 				draw(new Uint8Array(value));
 			});
 		};
@@ -58,3 +61,10 @@ resizeTo(1200, 800);
 		ctx?.putImageData(image, 0, 0);
 	}
 })();
+
+function showFps(delay: number) {
+	const counter = $('#fps_count')
+	if (!counter) return
+	const fps = Math.round(1000 / delay)
+	counter.innerText = `${fps} fps`
+}
