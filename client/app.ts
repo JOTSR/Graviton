@@ -42,6 +42,8 @@ resizeTo(1200, 800);
  */
 (() => {
 	const canvas = $<HTMLCanvasElement>('#canvas')!;
+	canvas.width = 800;
+	canvas.height = 800;
 	const ctx = canvas.getContext('2d');
 	const image = ctx?.createImageData(800, 800)!;
 
