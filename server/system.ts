@@ -77,7 +77,8 @@ export class System {
 					this.#size[0],
 					this.#size.length,
 				) as Coord2D<Length>,
-				acceleration: [0, 0] as Coord2D<Acceleration>,
+				//TODO initial acceleration must be configurable via UI
+				acceleration: randomArray(-10, 10, 2) as Coord2D<Acceleration>,
 			});
 		}
 		this.#bodies = [...bodies];
@@ -112,8 +113,7 @@ function matrixIndexToPixelLinearIndex(
 	position: number[],
 	matrixSize: number[],
 ): number {
-	const rawIndex = Math.round(position[0]) * 4 +
-		Math.round(position[1]) * matrixSize[1] * 4;
+	const rawIndex = Math.round(position[0]) * 4 + Math.round(position[1]) * matrixSize[1] * 4;
 	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4;
 	return rawIndex % pixelArrayLength;
 }
