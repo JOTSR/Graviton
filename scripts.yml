@@ -11,3 +11,6 @@ scripts:
         - 'deno run --unstable --allow-net=0.0.0.0 --allow-run --allow-read="." --allow-ffi --watch ./server/main.ts'
         - 'deno bundle --watch ./client/app.ts ./public/app.js'
     desc: 'start in watch mode'
+  format:
+    cmd: 'deno fmt'
+    gitHook: 'pre-commit'

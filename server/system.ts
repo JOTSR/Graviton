@@ -2,15 +2,16 @@ import {
 	Acceleration,
 	Body,
 	Coord2D,
-	Coord3D,
 	Length,
 	Mass,
 	Time,
 } from './definitions.ts';
 
+import { randomIntArray } from '../deps.ts';
+
 export class System {
 	#bodiesQuantity: number;
-	#size: Coord3D<Length> | Coord2D<Length>;
+	#size: Coord2D<Length>;
 	#bodies = [] as Body[];
 
 	τ = 10 as Time;
@@ -18,10 +19,10 @@ export class System {
 
 	/**
 	 * Consrtuct a sandbox universe with fixed properties
-	 * @param size 3D volume of the system
+	 * @param size 2D volume of the system
 	 * @param bodiesQuantity Quantity of bodies which will placed randomly
 	 */
-	constructor(size: Coord3D<Length> | Coord2D<Length>, bodiesQuantity: number) {
+	constructor(size: Coord2D<Length>, bodiesQuantity: number) {
 		this.#bodiesQuantity = bodiesQuantity;
 		this.#size = size;
 		this.generateBodies(1);
@@ -61,11 +62,8 @@ export class System {
 				: meanMass) as Mass;
 			this.#bodies?.push({
 				mass,
-				//@ts-ignore same type of size
-				position: this.#size.map((coord) => {
-					return coord * Math.random();
-				}),
-				acceleration: [0, 0, 0] as Coord3D<Acceleration>,
+				position: randomIntArray(0, this.#size[0], this.#size.length) as Coord2D<Length>,
+				acceleration: [0, 0] as Coord2D<Acceleration>,
 			});
 		}
 	}
@@ -76,15 +74,17 @@ export class System {
 		).fill(0) as number[];
 		for (const { position } of this.#bodies) {
 			//possible overflow > 255
-			const index =
-				Math.round(
-					position[0] * 4 + (position[1] - 1) * this.#size[1] * 4 - 1,
-				) % (array.length - 4);
-			const value = array[index];
-			const updatedValues = value + 10;
+			const index = matrixIndexToPixelLinearIndex(position, this.#size)
+			const value = array[index] + 10;
 			array.splice(index, 4, value, value, value, 255);
 		}
 
 		return Uint8ClampedArray.from(array);
 	}
+}
+
+function matrixIndexToPixelLinearIndex(position: number[], matrixSize: number[]): number {
+	const rawIndex = position[0] * 4 + position[1] * matrixSize[1] * 4
+	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4
+	return rawIndex % pixelArrayLength
 }
