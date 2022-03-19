@@ -79,7 +79,7 @@ export class System {
 		for (const { position } of this.#bodies) {
 			//possible overflow > 255
 			const index = matrixIndexToPixelLinearIndex(position, this.#size);
-			const value = array[index] + 10;
+			const value = /*array[index] +*/ 255;
 			array.splice(index, 4, value, value, value, 255);
 		}
 

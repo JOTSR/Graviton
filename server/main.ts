@@ -3,7 +3,7 @@ import { Display } from './display.ts';
 import { updatePosition } from './gravitation.ts';
 import { System } from './system.ts';
 
-const system = new System([800, 800] as Coord2D<Length>, 1e5);
+const system = new System([800, 800] as Coord2D<Length>, 1e3);
 
 const display = new Display(system);
 
