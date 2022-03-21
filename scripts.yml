@@ -2,14 +2,14 @@ scripts:
   start:
     cmd:
      pll:
-      - 'deno run --unstable --allow-net=0.0.0.0 --allow-run --allow-read="." --allow-ffi ./server/main.ts'
-      - 'deno bundle ./client/app.ts ./public/app.js'
+      - 'deno run --unstable --allow-net=0.0.0.0 --allow-run --allow-read="." --allow-ffi ./main.ts'
+      - 'deno bundle ./ui/client/app.ts ./ui/public/app.js'
     desc: 'Run app'
   dev:
     cmd:
       pll:
-        - 'deno run --unstable --allow-net=0.0.0.0 --allow-run --allow-read="." --allow-ffi --watch ./server/main.ts'
-        - 'deno bundle --watch ./client/app.ts ./public/app.js'
+        - 'deno run --unstable --allow-net=0.0.0.0 --allow-run --allow-read="." --allow-ffi --watch ./main.ts'
+        - 'deno bundle --watch ./ui/client/app.ts ./ui/public/app.js'
     desc: 'start in watch mode'
   # format:
   #   cmd: 'deno fmt'

@@ -1,4 +1,4 @@
-import { System } from './system.ts';
+import { System } from '../system/system.ts';
 import { Application, Router } from '../deps.ts';
 
 /**
@@ -9,7 +9,7 @@ const app = new Application();
 app.use(async (context, next) => {
 	try {
 		await context.send({
-			root: `${Deno.cwd()}/public`,
+			root: `${Deno.cwd()}/ui/public`,
 			index: 'index.html',
 		});
 	} catch {

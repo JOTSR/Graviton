@@ -5,7 +5,7 @@ import {
 	Length,
 	Mass,
 	Time,
-} from './definitions.ts';
+} from '../definitions.ts';
 
 import { randomArray } from '../deps.ts';
 
@@ -15,7 +15,9 @@ export class System {
 	#bodies = [] as Body[];
 
 	τ = 17 as Time;
-	field = 6.674_30e-11; //G
+	// field = 6.674_30e-11; //G
+	field = 1e-5; //G
+	//TODO add field to controls UI
 
 	/**
 	 * Consrtuct a sandbox universe with fixed properties
@@ -75,6 +77,8 @@ export class System {
 				position: randomArray(
 					0,
 					this.#size[0],
+					// - this.#size[0] / 2,
+					// this.#size[0] / 2,
 					this.#size.length,
 				) as Coord2D<Length>,
 				//TODO initial acceleration must be configurable via UI
@@ -95,6 +99,8 @@ export class System {
 		for (const { position, color, acceleration } of this.#bodies) {
 			if (position[0] < 0 || position[0] > 800) continue;
 			if (position[1] < 0 || position[1] > 800) continue;
+			// if (position[0] < -400 || position[0] > 400) continue;
+			// if (position[1] < -400 || position[1] > 400) continue;
 			const index = matrixIndexToPixelLinearIndex(position, this.#size);
 			const meanAcceleration = Math.abs(acceleration[0]) +
 				Math.abs(acceleration[1]) / 2;
@@ -111,13 +117,12 @@ function computeColorShift(acceleration: number) {
 	let v = 255;
 	let b = 255;
 
-	const ceil = 50;
-	if (acceleration > ceil) {
-		r = 255 - acceleration + ceil;
+	if (acceleration > 0) {
+		r = Math.min(255 - acceleration * 2, 0);
 		v = r;
 	}
-	if (acceleration < ceil) {
-		b = 255 * acceleration / ceil;
+	if (acceleration < 0) {
+		b = Math.min(255 + acceleration * 2, 0);
 		v = b;
 	}
 
@@ -138,8 +143,7 @@ function matrixIndexToPixelLinearIndex(
 	position: number[],
 	matrixSize: number[],
 ): number {
-	const rawIndex = Math.round(position[0]) * 4 +
-		Math.round(position[1]) * matrixSize[1] * 4;
-	const pixelArrayLength = matrixSize[0] * matrixSize[1] * 4;
-	return rawIndex % pixelArrayLength;
+	const rawIndex = Math.round(position[0] /* + matrixSize[0] / 2*/) * 4 +
+		Math.round(position[1] /* + matrixSize[1] / 2*/) * matrixSize[1] * 4;
+	return rawIndex;
 }
