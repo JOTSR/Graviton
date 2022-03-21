@@ -54,10 +54,20 @@ export class Display {
 			const cmd = [
 				'pwsh',
 				'/c',
-				'Start-Process chrome -ArgumentList "--app=http://localhost:8080"',
+				'Start-Process come -ArgumentList "--app=http://localhost:8080"',
 			];
-			const process = Deno.run({ cmd });
-			await process.status();
+			try {
+				const process = Deno.run({ cmd });
+				if (!(await process.status()).success) {
+					console.error(
+						`Can't open chrome, try to open http://localhost:8080 on your browser`,
+					);
+				}
+			} catch {
+				console.error(
+					`Can't open chrome, try to open http://localhost:8080 on your browser`,
+				);
+			}
 		});
 
 		app.use(router.routes());
