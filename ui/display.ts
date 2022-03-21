@@ -54,7 +54,7 @@ export class Display {
 			const cmd = [
 				'pwsh',
 				'/c',
-				'Start-Process come -ArgumentList "--app=http://localhost:8080"',
+				'Start-Process chrome -ArgumentList "--app=http://localhost:8080"',
 			];
 			try {
 				const process = Deno.run({ cmd });
